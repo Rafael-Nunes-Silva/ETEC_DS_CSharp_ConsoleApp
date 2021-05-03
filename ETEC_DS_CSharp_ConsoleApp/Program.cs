@@ -49,7 +49,7 @@ class Program
     static void Main(string[] args)
     {
         Console.WriteLine("Insira o numero correspondente ao programa que deseja utilizar.");
-        Console.Write($"{MakeAppsList()}\n");
+        Console.Write($"{FormatTable(appsTable, 3)}\n");
 
         int appIndex = Utils.GetInt("Insira sua escolha");
         if (appIndex > programas.ToArray().Length || appIndex < 0)
@@ -63,28 +63,25 @@ class Program
         Console.Write("\nDeseja reutilizar o programa? digite [y] para sim ou [n] para não:\n");
         string input = Console.ReadLine();
         if (input == "y" || input == "Y")
-        {
-            Console.Clear();
-            Main(new string[0]);
-        }
+            Restart();
 
         Environment.Exit(0);
     }
 
-    static string MakeAppsList()
+    static string FormatTable(string[] data, int collumns)
     {
         string list = "";
-        for (int i = 1; i <= appsTable.Length; i++)
+        for (int i = 1; i <= data.Length; i++)
         {
             int j = i - 1;
             if (j < 10) list += $"{j}  | ";
             else list += $"{j} | ";
 
-            list += appsTable[j];
+            list += data[j];
 
-            if (i == 0 || i % 3 != 0)
+            if (i == 0 || i % collumns != 0)
             {
-                for (int s = 0; s < Utils.Max(Utils.StringLengths(appsTable)) - appsTable[j].Length; s++)
+                for (int s = 0; s < Utils.Max(Utils.StringLengths(data)) - data[j].Length; s++)
                     list += " ";
 
                 list += " | ";
@@ -94,11 +91,12 @@ class Program
         return list;
     }
 
-    public static void Restart()
+    public static void Restart(bool erro=false)
     {
         Console.Clear();
-        Console.WriteLine("Apenas NUMEROS serão aceitos!\n\n\n\n\n");
         Main(new string[0]);
+        if (erro)
+            Console.WriteLine("Apenas NUMEROS serão aceitos!\n\n\n\n\n");
     }
 
     #region Calculos
@@ -437,11 +435,17 @@ class Program
     /// </summary>
     static void Salario()
     {
-        float horasSemanais = Utils.GetFloat("Insira a quantidade base de horas de trabalho semanais");
+        float horasMensais = Utils.GetFloat("Insira a quantidade de horas de trabalho mensais");
+        float horasExtra = Utils.GetFloat("Insira a quantidade de horas extra trabalhadas");
+        float salario = Utils.GetFloat("Insira quanto voce recebe por hora trabalhada");
+        float salarioFinal = (salario * horasMensais) + ((salario * 1.5f) * horasExtra);
+        /*
+        float horasSemanais = Utils.GetFloat("Insira a quantidade de horas de trabalho semanais");
         int semanas = Utils.GetInt("Insira quantas semanas voce trabalhou no mês");
         float horasExtra = Utils.GetFloat("Insira a quantidade de horas extra trabalhadas");
         float salario = Utils.GetFloat("Insira quanto voce recebe por hora trabalhada");
-        float salarioFinal = (salario * horasSemanais * semanas) + ((salario * 1.5f) * horasExtra);
+        float salarioFinal = (salario * horasMensais * semanas) + ((salario * 1.5f) * horasExtra);
+        */
 
         Console.WriteLine($"Seu salario final será de {salarioFinal}");
     }

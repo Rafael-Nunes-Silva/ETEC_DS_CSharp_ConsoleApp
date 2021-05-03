@@ -33,7 +33,7 @@ public class Utils
         {
             if (input == caractere)
             {
-                Program.Restart();
+                Program.Restart(true);
                 return false;
             }
         }
