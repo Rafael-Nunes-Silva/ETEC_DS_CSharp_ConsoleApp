@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 public class Utils
-{   
+{
     /// <summary>
     /// retorna verdadeiro se for um numero e falso se for algum outro caractere
     /// </summary>
@@ -20,7 +20,7 @@ public class Utils
                 "p", "P", "q", "Q", "r", "R",
                 "s", "S", "t", "T", "u", "U",
                 "v", "V", "w", "W", "x", "X",
-                "y", "Y", "z", "Z",
+                "y", "Y", "z", "Z", "ç", "Ç",
                 "!", "@", "#", "$", "%", "&",
                 "*", "(", ")", "[", "]", "{",
                 "}", "?", ":", ";", "<", ">",
@@ -97,7 +97,7 @@ public class Utils
         return Convert.ToDouble(input);
     }
     /// <summary>
-    /// retorna uma lista com os comprimentos de cada string da lista inserida
+    /// retorna uma lista com os comprimentos de cada string de uma lista
     /// </summary>
     public static int[] StringLengths(string[] s)
     {

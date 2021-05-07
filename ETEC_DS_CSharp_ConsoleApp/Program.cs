@@ -5,6 +5,12 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
+enum TabelaType
+{
+    BASIC,
+    ENUMERATED,
+}
+
 class Program
 {
     static readonly string[] appsTable = new string[]
@@ -25,6 +31,7 @@ class Program
         "Aprovado ou Reprovado",
         "IMC",
         "Salario Horas Extra",
+        "Venda de Combustiveis",
     };
     static readonly Dictionary<int, Action> programas = new Dictionary<int, Action>()
     {
@@ -44,12 +51,13 @@ class Program
         { 13, () => AprovadoReprovado() },
         { 14, () => IMC() },
         { 15, () => Salario() },
+        { 16, () => Combustiveis() },
     };
 
     static void Main(string[] args)
     {
         Console.WriteLine("Insira o numero correspondente ao programa que deseja utilizar.");
-        Console.Write($"{FormatTable(appsTable, 3)}\n");
+        Console.Write($"{FormatTable(appsTable, 3, TabelaType.ENUMERATED)}\n");
 
         int appIndex = Utils.GetInt("Insira sua escolha");
         if (appIndex > programas.ToArray().Length || appIndex < 0)
@@ -67,15 +75,22 @@ class Program
 
         Environment.Exit(0);
     }
-
-    static string FormatTable(string[] data, int collumns)
+    static string FormatTable(string[] data, int collumns, TabelaType type = TabelaType.BASIC)
     {
         string list = "";
         for (int i = 1; i <= data.Length; i++)
         {
             int j = i - 1;
-            if (j < 10) list += $"{j}  | ";
-            else list += $"{j} | ";
+            switch (type)
+            {
+                case TabelaType.BASIC:
+                    list += $" - ";
+                    break;
+                case TabelaType.ENUMERATED:
+                    if (j < 10) list += $"{j}  | ";
+                    else list += $"{j} | ";
+                    break;
+            }
 
             list += data[j];
 
@@ -90,13 +105,12 @@ class Program
         }
         return list;
     }
-
     public static void Restart(bool erro=false)
     {
         Console.Clear();
-        Main(new string[0]);
         if (erro)
             Console.WriteLine("Apenas NUMEROS serão aceitos!\n\n\n\n\n");
+        Main(new string[0]);
     }
 
     #region Calculos
@@ -415,20 +429,7 @@ class Program
 
         Console.WriteLine($"\nSeu IMC é de {resultado}");
 
-        if (resultado < 17)
-            Console.WriteLine(imcTable[0]);
-        else if (resultado > 17 && resultado < 18.99f)
-            Console.WriteLine(imcTable[1]);
-        else if (resultado > 19 && resultado < 24.99f)
-            Console.WriteLine(imcTable[2]);
-        else if (resultado > 25 && resultado < 29.99f)
-            Console.WriteLine(imcTable[3]);
-        else if (resultado > 30 && resultado < 34.99f)
-            Console.WriteLine(imcTable[4]);
-        else if (resultado > 35 && resultado < 39.99f)
-            Console.WriteLine(imcTable[5]);
-        else
-            Console.WriteLine(imcTable[6]);
+        Console.WriteLine($"\n{FormatTable(imcTable, 2)}");
     }
     /// <summary>
     /// Calcula o salario com horas extra
@@ -439,15 +440,58 @@ class Program
         float horasExtra = Utils.GetFloat("Insira a quantidade de horas extra trabalhadas");
         float salario = Utils.GetFloat("Insira quanto voce recebe por hora trabalhada");
         float salarioFinal = (salario * horasMensais) + ((salario * 1.5f) * horasExtra);
-        /*
-        float horasSemanais = Utils.GetFloat("Insira a quantidade de horas de trabalho semanais");
-        int semanas = Utils.GetInt("Insira quantas semanas voce trabalhou no mês");
-        float horasExtra = Utils.GetFloat("Insira a quantidade de horas extra trabalhadas");
-        float salario = Utils.GetFloat("Insira quanto voce recebe por hora trabalhada");
-        float salarioFinal = (salario * horasMensais * semanas) + ((salario * 1.5f) * horasExtra);
-        */
 
-        Console.WriteLine($"Seu salario final será de {salarioFinal}");
+        Console.WriteLine($"Seu salario é de {salario * horasMensais}.");
+
+        Console.WriteLine($"Acrecentados {(salario * 1.5f) * horasExtra} pelas {horasExtra} horas extra.");
+
+        Console.WriteLine($"O total foi de {salarioFinal}.");
+    }
+    /// <summary>
+    /// Simula uma venda de combustiveis
+    /// </summary>
+    static void Combustiveis()
+    {
+        string[] tabelaPreços = new string[]
+        {
+            "Gasolina - R$ 3,30",
+            "Álcool - R$ 2,90"
+        };
+        string[] tabelaDescontos = new string[]
+        {
+            "3% até 20 litros de Álcool",
+            "5% acima de 20 litros de Álcool",
+            "4% até 20 litros de Gasolina",
+            "6% acima de 20 litros de Gasolina",
+        };
+
+        Console.WriteLine("Tabela de preços:");
+        Console.Write($"{FormatTable(tabelaPreços, 2)}\n");
+        Console.WriteLine("Tabela de descontos:");
+        Console.Write($"{FormatTable(tabelaDescontos, 2)}\n");
+        Console.WriteLine("Insira o tipo de combustivel desejado ('A' - álcool, 'G' - gasolina)");
+
+        string combTipo = Console.ReadLine();
+        if (combTipo != "A" && combTipo != "a" && combTipo != "G" && combTipo != "g")
+            Main(new string[0]);
+
+        float litros = Utils.GetFloat("Insira quantos litros deseja");
+        double valorTotal = 0;
+        if (litros <= 20)
+        {
+            if (combTipo == "A")
+                valorTotal = litros * (2.9 - (2.9 * 0.03));
+            else
+                valorTotal = litros * (3.3 - (3.3 * 0.04));
+        }
+        else
+        {
+            if (combTipo == "A")
+                valorTotal = litros * (2.9 - (2.9 * 0.04));
+            else
+                valorTotal = litros * (3.3 - (3.3 * 0.06));
+        }
+        Console.WriteLine($"O valor a ser pago é de R$ {valorTotal}");
     }
     #endregion
 }
