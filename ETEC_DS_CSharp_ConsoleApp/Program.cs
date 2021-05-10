@@ -5,6 +5,12 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
+enum ErrorCode
+{
+    SEM_ERROS = -1,
+    NUMERO_INVALIDO = 0,
+    LETRA_INVALIDA = 1
+}
 enum TabelaType
 {
     BASIC,
@@ -32,6 +38,9 @@ class Program
         "IMC",
         "Salario Horas Extra",
         "Venda de Combustiveis",
+        "Igualdade entre numeros",
+        "Ira viajar",
+
     };
     static readonly Dictionary<int, Action> programas = new Dictionary<int, Action>()
     {
@@ -52,20 +61,25 @@ class Program
         { 14, () => IMC() },
         { 15, () => Salario() },
         { 16, () => Combustiveis() },
+        { 17, () => IgualdadeNumeros() },
+        { 18, () => IraViajar() },
+
     };
 
     static void Main(string[] args)
     {
         Console.WriteLine("Insira o numero correspondente ao programa que deseja utilizar.");
-        Console.Write($"{FormatTable(appsTable, 3, TabelaType.ENUMERATED)}\n");
+        Console.Write($"{FormatTable(appsTable, 4, TabelaType.ENUMERATED)}\n");
 
         int appIndex = Utils.GetInt("Insira sua escolha");
         if (appIndex > programas.ToArray().Length || appIndex < 0)
         {
             Console.Clear();
-            Console.Write("O numero inserido não é valido");
+            Console.Write("O numero inserido não é valido\n\n\n");
             Main(new string[0]);
         }
+
+        Console.Clear();
         programas[appIndex]();
 
         Console.Write("\nDeseja reutilizar o programa? digite [y] para sim ou [n] para não:\n");
@@ -75,6 +89,9 @@ class Program
 
         Environment.Exit(0);
     }
+    /// <summary>
+    /// retorna uma string formatada como uma tabela numerada ou não
+    /// </summary>
     static string FormatTable(string[] data, int collumns, TabelaType type = TabelaType.BASIC)
     {
         string list = "";
@@ -87,8 +104,8 @@ class Program
                     list += $" - ";
                     break;
                 case TabelaType.ENUMERATED:
-                    if (j < 10) list += $"{j}  | ";
-                    else list += $"{j} | ";
+                    if (j < 10) list += $" {j}  | ";
+                    else list += $" {j} | ";
                     break;
             }
 
@@ -99,17 +116,30 @@ class Program
                 for (int s = 0; s < Utils.Max(Utils.StringLengths(data)) - data[j].Length; s++)
                     list += " ";
 
-                list += " | ";
+                list += "|";
             }
             else list += "\n";
         }
         return list;
     }
-    public static void Restart(bool erro=false)
+    /// <summary>
+    /// reinicia a aplicação com um código de erro ou não
+    /// </summary>
+    public static void Restart(ErrorCode erro = ErrorCode.SEM_ERROS)
     {
         Console.Clear();
-        if (erro)
-            Console.WriteLine("Apenas NUMEROS serão aceitos!\n\n\n\n\n");
+        if (erro == ErrorCode.SEM_ERROS)
+            Main(new string[0]);
+
+        switch (erro)
+        {
+            case ErrorCode.NUMERO_INVALIDO:
+                Console.WriteLine("Apenas NUMEROS serão aceitos!\n\n\n\n\n");
+                break;
+            case ErrorCode.LETRA_INVALIDA:
+                Console.WriteLine("A letra inserida não é valida!\n\n\n\n\n");
+                break;
+        }
         Main(new string[0]);
     }
 
@@ -473,7 +503,7 @@ class Program
 
         string combTipo = Console.ReadLine();
         if (combTipo != "A" && combTipo != "a" && combTipo != "G" && combTipo != "g")
-            Main(new string[0]);
+            Restart(ErrorCode.LETRA_INVALIDA);
 
         float litros = Utils.GetFloat("Insira quantos litros deseja");
         double valorTotal = 0;
@@ -492,6 +522,71 @@ class Program
                 valorTotal = litros * (3.3 - (3.3 * 0.06));
         }
         Console.WriteLine($"O valor a ser pago é de R$ {valorTotal}");
+    }
+    /// <summary>
+    /// verifica a igualdade entre numeros em uma lista 
+    /// e retorna se são todos iguais ou quais são o maior e menor valor
+    /// </summary>
+    static void IgualdadeNumeros()
+    {
+        bool iguais = true;
+        float[] numeros = new float[Utils.GetInt("Insira quantos numeros deseja verificar")];
+        for (int i = 0; i < numeros.Length; i++)
+        {
+            numeros[i] = Utils.GetFloat($"Insira o valor na posição {i+1}");
+            if (i > 0 && numeros[i] != numeros[i - 1])
+                iguais = false;
+        }
+
+        if (iguais)
+        {
+            Console.WriteLine("Todos os numeros são iguais");
+            return;
+        }
+
+        Console.WriteLine($"{Utils.Max(numeros)} é o maior e {Utils.Min(numeros)} é o menor numero");
+
+        Console.Write("\nDeseja visualizar a lista de numeros organizada? digite [y] para sim ou [n] para não:\n");
+        string input = Console.ReadLine();
+        if (input == "n" || input == "N")
+            Restart();
+
+        Console.WriteLine("Lista organizada:\n");
+        foreach (int i in Utils.Reorganize(numeros))
+            Console.WriteLine(i);
+    }
+    /// <summary>
+    /// Simula uma venda de passagens de onibus
+    /// </summary>
+    static void IraViajar()
+    {
+        bool temOnibus = Utils.GetRandom();
+        float passagem = Utils.GetRandom(200, 500);
+        string nome;
+        float carteira;
+
+        Console.WriteLine("Insira seu nome");
+        nome = Console.ReadLine();
+
+        carteira = Utils.GetFloat("Insira quanto tem de dinheiro");
+
+        if (!temOnibus)
+        {
+            Console.WriteLine("Os onibus não estão disponiveis");
+            return;
+        }
+
+        Console.WriteLine($"A passagem custa {passagem}\n");
+
+        Console.WriteLine(nome);
+        if (carteira < passagem)
+        {
+            Console.WriteLine("Voce não possui dinheiro o suficiente para a passagem e não podera viajar");
+            return;
+        }
+
+        if (temOnibus && carteira > passagem)
+            Console.WriteLine("Voce poderá viajar");
     }
     #endregion
 }
