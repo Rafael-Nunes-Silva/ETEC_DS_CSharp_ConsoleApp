@@ -4,6 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+public enum TabelaType
+{
+    BASIC,
+    ENUMERATED,
+}
 public class Utils
 {
     /// <summary>
@@ -33,23 +38,21 @@ public class Utils
         {
             if (input == caractere)
             {
-                Program.Restart(ErrorCode.NUMERO_INVALIDO);
+                Program.Restart(true, "Apenas NUMEROS serão aceitos!");
                 return false;
             }
         }
 
         return true;
     }
-
     /// <summary>
     /// retorna um valor aleatorio entre um valor minimo e maximo do tipo int
     /// </summary>
     public static int GetRandom(int min, int max)
     {
         Random rand = new Random();
-        return rand.Next(min, max);
+        return rand.Next(min, max+1);
     }
-
     /// <summary>
     /// retorna um valor booleano aleatorio
     /// </summary>
@@ -62,7 +65,39 @@ public class Utils
 
         return true;
     }
+    /// <summary>
+    /// retorna uma string formatada como uma tabela numerada ou não
+    /// </summary>
+    public static string FormatTable(string[] data, int collumns, TabelaType type = TabelaType.BASIC)
+    {
+        string list = "";
+        for (int i = 1; i <= data.Length; i++)
+        {
+            int j = i - 1;
+            switch (type)
+            {
+                case TabelaType.BASIC:
+                    list += $" - ";
+                    break;
+                case TabelaType.ENUMERATED:
+                    if (j < 10) list += $" {j}  | ";
+                    else list += $" {j} | ";
+                    break;
+            }
 
+            list += data[j];
+
+            if (i == 0 || i % collumns != 0)
+            {
+                for (int s = 0; s < Utils.Max(Utils.StringLengths(data)) - data[j].Length; s++)
+                    list += " ";
+
+                list += "|";
+            }
+            else list += "\n";
+        }
+        return list;
+    }
     /// <summary>
     /// retorna o valor maximo num array de tipo int
     /// </summary>
@@ -102,7 +137,6 @@ public class Utils
         }
         return max;
     }
-
     /// <summary>
     /// retorna o valor minimo num array de tipo int
     /// </summary>
@@ -142,13 +176,12 @@ public class Utils
         }
         return min;
     }
-
     /// <summary>
     /// retorna o valor inserido convertido em int
     /// </summary>
-    public static int GetInt(string message = "Proximo")
+    public static int GetInt(string message = "")
     {
-        Console.Write($"{message}: \n");
+        Console.Write($"{message}: ");
         string input = Console.ReadLine();
         VerificarNumero(input);
         return Convert.ToInt32(input);
@@ -156,9 +189,9 @@ public class Utils
     /// <summary>
     /// retorna o valor inserido convertido em float
     /// </summary>
-    public static float GetFloat(string message = "Proximo")
+    public static float GetFloat(string message = "")
     {
-        Console.Write($"{message}: \n");
+        Console.Write($"{message}: ");
         string input = Console.ReadLine();
         VerificarNumero(input);
         return (float)Convert.ToDouble(input);
@@ -166,14 +199,13 @@ public class Utils
     /// <summary>
     /// retorna o valor inserido convertido em double
     /// </summary>
-    public static double GetDouble(string message = "Proximo")
+    public static double GetDouble(string message = "")
     {
-        Console.Write($"{message}: \n");
+        Console.Write($"{message}: ");
         string input = Console.ReadLine();
         VerificarNumero(input);
         return Convert.ToDouble(input);
     }
-
     /// <summary>
     /// retorna uma lista com os comprimentos de cada string de uma lista
     /// </summary>
@@ -184,7 +216,18 @@ public class Utils
             i[j] = s[j].Length;
         return i;
     }
+    /// <summary>
+    /// retorna uma string invertida
+    /// </summary>
+    public static string InvertString(string s)
+    {
+        string result = "";
 
+        for (int i = 1; i <= s.Length; i++)
+            result += s[s.Length - i];
+
+        return result;
+    }
     /// <summary>
     /// retorna uma lista reorganizada to tipo int
     /// </summary>

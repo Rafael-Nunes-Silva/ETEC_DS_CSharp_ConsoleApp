@@ -5,18 +5,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-enum ErrorCode
-{
-    SEM_ERROS = -1,
-    NUMERO_INVALIDO = 0,
-    LETRA_INVALIDA = 1
-}
-enum TabelaType
-{
-    BASIC,
-    ENUMERATED,
-}
-
 class Program
 {
     static readonly string[] appsTable = new string[]
@@ -40,7 +28,8 @@ class Program
         "Venda de Combustiveis",
         "Igualdade entre numeros",
         "Ira viajar",
-
+        "Contador",
+        "Converter Binario/Decimal",
     };
     static readonly Dictionary<int, Action> programas = new Dictionary<int, Action>()
     {
@@ -63,17 +52,19 @@ class Program
         { 16, () => Combustiveis() },
         { 17, () => IgualdadeNumeros() },
         { 18, () => IraViajar() },
-
+        { 19, () => Contador()},
+        { 20, () => DecimalBinario() },
     };
 
     static void Main(string[] args)
     {
         Console.WriteLine("Insira o numero correspondente ao programa que deseja utilizar.");
-        Console.Write($"{FormatTable(appsTable, 4, TabelaType.ENUMERATED)}\n");
+        Console.Write($"{Utils.FormatTable(appsTable, 4, TabelaType.ENUMERATED)}\n");
 
         int appIndex = Utils.GetInt("Insira sua escolha");
-        if (appIndex > programas.ToArray().Length || appIndex < 0)
+        if (appIndex > programas.ToArray().Length || appIndex < -1)
         {
+            if (appIndex == -1) Environment.Exit(0);
             Console.Clear();
             Console.Write("O numero inserido não é valido\n\n\n");
             Main(new string[0]);
@@ -90,56 +81,14 @@ class Program
         Environment.Exit(0);
     }
     /// <summary>
-    /// retorna uma string formatada como uma tabela numerada ou não
-    /// </summary>
-    static string FormatTable(string[] data, int collumns, TabelaType type = TabelaType.BASIC)
-    {
-        string list = "";
-        for (int i = 1; i <= data.Length; i++)
-        {
-            int j = i - 1;
-            switch (type)
-            {
-                case TabelaType.BASIC:
-                    list += $" - ";
-                    break;
-                case TabelaType.ENUMERATED:
-                    if (j < 10) list += $" {j}  | ";
-                    else list += $" {j} | ";
-                    break;
-            }
-
-            list += data[j];
-
-            if (i == 0 || i % collumns != 0)
-            {
-                for (int s = 0; s < Utils.Max(Utils.StringLengths(data)) - data[j].Length; s++)
-                    list += " ";
-
-                list += "|";
-            }
-            else list += "\n";
-        }
-        return list;
-    }
-    /// <summary>
     /// reinicia a aplicação com um código de erro ou não
     /// </summary>
-    public static void Restart(ErrorCode erro = ErrorCode.SEM_ERROS)
+    public static void Restart(bool erro = false, string err = "")
     {
         Console.Clear();
-        if (erro == ErrorCode.SEM_ERROS)
+        if (!erro)
             Main(new string[0]);
-
-        switch (erro)
-        {
-            case ErrorCode.NUMERO_INVALIDO:
-                Console.WriteLine("Apenas NUMEROS serão aceitos!\n\n\n\n\n");
-                break;
-            case ErrorCode.LETRA_INVALIDA:
-                Console.WriteLine("A letra inserida não é valida!\n\n\n\n\n");
-                break;
-        }
+        Console.WriteLine($"{err}!\n\n\n\n\n");
         Main(new string[0]);
     }
 
@@ -215,10 +164,17 @@ class Program
                 numeros[i] = Utils.GetDouble("Digite o primeiro numero para a divisão");
             else
                 numeros[i] = Utils.GetDouble("Digite o proximo numero para a divisão");
+
+            if(numeros[i] == 0)
+            {
+                Console.WriteLine("Não é possivel fazer divisões por 0");
+                i--;
+                continue;
+            }
         }
         // efetua a multiplicação
-        for (int j = 0; j < numeros.Length; j++)
-            resultado /= numeros[j];
+        for (int j = 0; j < numeros.Length-1; j++)
+            resultado += numeros[j] / numeros[j+1];
         // devolve para o ususario o resultado da soma
         Console.WriteLine($"A divisão dos valores é {resultado}");
     }
@@ -459,7 +415,7 @@ class Program
 
         Console.WriteLine($"\nSeu IMC é de {resultado}");
 
-        Console.WriteLine($"\n{FormatTable(imcTable, 2)}");
+        Console.WriteLine($"\n{Utils.FormatTable(imcTable, 2)}");
     }
     /// <summary>
     /// Calcula o salario com horas extra
@@ -496,14 +452,14 @@ class Program
         };
 
         Console.WriteLine("Tabela de preços:");
-        Console.Write($"{FormatTable(tabelaPreços, 2)}\n");
+        Console.Write($"{Utils.FormatTable(tabelaPreços, 2)}\n");
         Console.WriteLine("Tabela de descontos:");
-        Console.Write($"{FormatTable(tabelaDescontos, 2)}\n");
+        Console.Write($"{Utils.FormatTable(tabelaDescontos, 2)}\n");
         Console.WriteLine("Insira o tipo de combustivel desejado ('A' - álcool, 'G' - gasolina)");
 
         string combTipo = Console.ReadLine();
         if (combTipo != "A" && combTipo != "a" && combTipo != "G" && combTipo != "g")
-            Restart(ErrorCode.LETRA_INVALIDA);
+            Restart(true, "Letra inserida INVALIDA!");
 
         float litros = Utils.GetFloat("Insira quantos litros deseja");
         double valorTotal = 0;
@@ -587,6 +543,141 @@ class Program
 
         if (temOnibus && carteira > passagem)
             Console.WriteLine("Voce poderá viajar");
+    }
+    /// <summary>
+    /// Conta numeros especificados pelo usuario
+    /// </summary>
+    static void Contador()
+    {
+        int min = Utils.GetInt("Insira o numero inicial");
+        int max = Utils.GetInt("Insira o numero final");
+        int dist = Utils.GetInt("Insira de quanto em quanto o contador deve contar");
+
+        if (min == max)
+            Restart(true, "Os numeros não podem ser iguais");
+
+        if (min < max)
+        {
+            for (int i = min; i <= max; i+=1*dist)
+                Console.WriteLine(i);
+        }
+        else
+        {
+            for (int i = min; i >= max; i-=1*dist)
+                Console.WriteLine(i);
+        }
+    }
+    /// <summary>
+    /// traduz numeros decimais para binario e binario para decimais
+    /// </summary>
+    static void DecimalBinario()
+    {
+        string[] optionsTable = new string[]
+        {
+            "Decimal Inteiro para Binario",
+            "Binario Inteiro para Decimal",
+            "Decimal Quebrado para Binario",
+            "Binario Quebrado para Decimal",
+        };
+
+        Console.WriteLine(Utils.FormatTable(optionsTable, 2, TabelaType.ENUMERATED));
+
+        switch (Utils.GetInt("Insira sua escolha"))
+        {
+            case 0:     // Decimal Inteiro para Binario
+                int decIn = Utils.GetInt("Insira o numero Decimal inteiro");
+                int nIn = decIn;
+                string decInResult = "";
+
+                while (nIn > 0)
+                {
+                    if (nIn % 2 == 0) decInResult += "0";
+                    else decInResult += "1";
+                    nIn /= 2;
+                }
+
+                Console.WriteLine($"{decIn} em binario é: {Utils.InvertString(decInResult)}");
+                break;
+            case 1:     // Binario Inteiro para Decimal
+                string binIn = Utils.GetInt("Insira o numero Binario inteiro").ToString();
+                string invertBinIn = Utils.InvertString(binIn);
+                int binInResult = 0;
+
+
+                for (int i = 0; i < invertBinIn.Length; i++)
+                    binInResult += (int)(Convert.ToInt32(invertBinIn[i] - '0') * Math.Pow(2, i));
+
+                Console.WriteLine($"{binIn} em decimal é: {binInResult}");
+                break;
+            case 2:     // Decimal Quebrado para Binario
+                float dec = Utils.GetFloat("Insira o numero Decimal quebrado");
+                string sDec = dec.ToString();
+                int befComN = 0;
+                float aftComN = 0;
+                string sBefComN = "", sAftComN ="";
+                string decResult = "";
+
+                for(int i = 0; i < sDec.Length; i++)
+                {
+                    if (sDec[i] == ',' || sDec[i] == '.') break;
+                    sBefComN += Convert.ToInt32(sDec[i] - '0');
+                }
+                for (int i = sBefComN.Length+1; i < sDec.Length; i++)
+                {
+                    sAftComN += Convert.ToInt32(sDec[i] - '0');
+                }
+
+                befComN = Convert.ToInt32(sBefComN);
+                aftComN = (float)Convert.ToDouble(sAftComN)/1000;
+
+                while (befComN > 0)
+                {
+                    if (befComN % 2 == 0) decResult += "0";
+                    else decResult += "1";
+                    befComN /= 2;
+                }
+                decResult += ".";
+                for(int i = 0; i < sAftComN.Length; i++)
+                {
+                    if (aftComN * 2 < 1) decResult += "0";
+                    else decResult += "1";
+                    aftComN *= 2;
+                }
+
+                Console.WriteLine($"{dec} em binario é: {decResult}");
+                break;
+            case 3:     // Binario Quebrado para Decimal
+                string bin = Utils.GetDouble("Insira o numero Binario quebrado").ToString();
+                // string invertBin = Utils.InvertString(bin);
+                int befComBinN = 0;
+                double aftComBinN = 0;
+                string sBefComBinN = "";
+                string sAftComBinN = "";
+                double binResult = 0;
+
+                for (int i = 0; i < bin.Length; i++)
+                {
+                    if (bin[i] == ',' || bin[i] == '.') break;
+                    sBefComBinN += bin[i];
+                }
+                for (int i = sBefComBinN.Length+1; i < bin.Length; i++)
+                    sAftComBinN += bin[i];
+
+                sBefComBinN = Utils.InvertString(sBefComBinN);
+
+                for (int i = 0; i < sBefComBinN.Length; i++)
+                    befComBinN += (int)(Convert.ToInt32(sBefComBinN[i] - '0') * Math.Pow(2, i));
+                for (int i = 0; i < sAftComBinN.Length; i++)
+                    aftComBinN += ((Convert.ToInt32(sAftComBinN[i]) - '0') / Math.Pow(2, i + 1));
+
+                binResult += befComBinN + aftComBinN;
+
+                Console.WriteLine($"{bin} em decimal é: {binResult}");
+                break;
+            default:
+                Restart(true, "Sua escolha estava fora dos parametros!");
+                break;
+        }
     }
     #endregion
 }
