@@ -100,23 +100,16 @@ class Program
     {
         double resultado = 0;
 
-        // quantidade de numeros a serem somados
         int inputSomas = Utils.GetInt("Insira o total de numeros a serem somados");
-        // verifica se o valor inserido pelo usuario é um numero
-        // se sim, usa-o para criar os arrays, se não, reinicia o programa
+
         double[] numeros = new double[inputSomas];
-        // pede para o usuario inserir os numeros a serem somados
+
         for (int i = 0; i < numeros.Length; i++)
-        {
-            if (i == 0)
-                numeros[i] = Utils.GetDouble("Digite o primeiro numero para a soma");
-            else
-                numeros[i] = Utils.GetDouble("Digite o proximo numero para a soma");
-        }
-        // efetua a soma
+            numeros[i] = Utils.GetDouble($"Digite o {i+1}º valor para a soma");
+
         for (int j = 0; j < numeros.Length; j++)
             resultado += numeros[j];
-        // devolve para o ususario o resultado da soma
+
         Console.WriteLine($"A soma dos valores é {resultado}");
     }
     /// <summary>
@@ -126,19 +119,12 @@ class Program
     {
         double resultado = 0;
 
-        // quantidade de numeros a serem subtraidos
         int inputSomas = Utils.GetInt("Insira o total de numeros a serem subtraidos");
-        // verifica se o valor inserido pelo usuario é um numero
-        // se sim, usa-o para criar os arrays, se não, reinicia o programa
+
         double[] numeros = new double[inputSomas];
-        // pede para o usuario inserir os numeros a serem subtraidos
+
         for (int i = 0; i < numeros.Length; i++)
-        {
-            if (i == 0)
-                numeros[i] = Utils.GetDouble("Digite o primeiro numero para a subtração");
-            else
-                numeros[i] = Utils.GetDouble("Digite o proximo numero para a subtração");
-        }
+            numeros[i] = Utils.GetDouble($"Digite o {i+1}º valor para a subtração");
         // efetua a soma
         for (int j = 0; j < numeros.Length; j++)
             resultado -= numeros[j];
@@ -152,18 +138,11 @@ class Program
     {
         double resultado = 0;
 
-        // quantidade de numeros a serem divididos
-        // verifica se o valor inserido pelo usuario é um numero
-        // se sim, usa-o para criar os arrays, se não, reinicia o programa
         double[] numeros = new double[Utils.GetInt("Insira o total de numeros a serem divididos")];
 
-        // pede para o usuario inserir os numeros a serem divididos
         for (int i = 0; i < numeros.Length; i++)
         {
-            if (i == 0)
-                numeros[i] = Utils.GetDouble("Digite o primeiro numero para a divisão");
-            else
-                numeros[i] = Utils.GetDouble("Digite o proximo numero para a divisão");
+            numeros[i] = Utils.GetDouble($"Digite o {i+1}º valor para a divisão");
 
             if(numeros[i] == 0)
             {
@@ -172,10 +151,10 @@ class Program
                 continue;
             }
         }
-        // efetua a multiplicação
+
         for (int j = 0; j < numeros.Length-1; j++)
             resultado += numeros[j] / numeros[j+1];
-        // devolve para o ususario o resultado da soma
+
         Console.WriteLine($"A divisão dos valores é {resultado}");
     }
     /// <summary>
@@ -185,23 +164,16 @@ class Program
     {
         double resultado = 1;
 
-        // quantidade de numeros a serem multiplicados
         int inputMultiplicar = Utils.GetInt("Insira o total de numeros a serem multiplicados");
-        // verifica se o valor inserido pelo usuario é um numero
-        // se sim, usa-o para criar os arrays, se não, reinicia o programa
+
         double[] numeros = new double[inputMultiplicar];
-        // pede para o usuario inserir os numeros a serem multiplicados
+
         for (int i = 0; i < numeros.Length; i++)
-        {
-            if (i == 0)
-                numeros[i] = Utils.GetInt("Digite o primeiro numero para a multiplicação");
-            else
-                numeros[i] = Utils.GetInt("Digite o proximo numero para a multiplicação");
-        }
-        // efetua a multiplicação
+            numeros[i] = Utils.GetInt($"Digite o {i+1}º valor para a multiplicação");
+
         for (int j = 0; j < numeros.Length; j++)
             resultado *= numeros[j];
-        // devolve para o ususario o resultado da soma
+
         Console.WriteLine($"A multiplicação dos valores é {resultado}");
     }
     /// <summary>
@@ -211,23 +183,16 @@ class Program
     {
         double resultado = 0;
 
-        // quantidade de numeros a serem usados no calculo da média
         int numerosParaMedia = Utils.GetInt("Insira quantas notas serão calculadas para obter a média");
-        // verifica se o valor inserido pelo usuario é um numero
-        // se sim, usa-o para criar os arrays, se não, reinicia o programa
+
         double[] numeros = new double[numerosParaMedia];
-        // pede para o usuario inserir os numeros a serem somados
+
         for (int i = 0; i < numeros.Length; i++)
-        {
-            if (i == 0) numeros[i] = Utils.GetDouble("Digite o primeiro numero para a média");
-            else numeros[i] = Utils.GetDouble("Digite o proximo numero para a média");
-        }
-        // calcula a média
+            numeros[i] = Utils.GetDouble($"Digite o {i+1}º valor para a média");
+
         for (int j = 0; j < numeros.Length; j++)
-        {
             resultado += numeros[j];
-        }
-        // devolve para o usuario a média calculada
+
         Console.WriteLine($"A média é {resultado / numeros.Length}");
     }
     /// <summary>
@@ -253,13 +218,7 @@ class Program
     {
         int numero = Utils.GetInt("Insira o numero a ser calculado");
 
-        if (numero % 2 == 0)
-        {
-            Console.WriteLine($"{numero} é par");
-            return;
-        }
-
-        Console.WriteLine($"{numero} é impar");
+        Console.WriteLine((numero % 2 == 0) ? $"{numero} é par" : $"{numero} é impar");
     }
     /// <summary>
     /// calcula a area de diferentes formas geometricas
@@ -275,12 +234,9 @@ class Program
 
         Console.Write("Insira o numero correspondente ao calculo que deseja");
 
-        foreach (string s in formas)
-            Console.WriteLine(s);
+        Console.WriteLine(Utils.FormatTable(formas, 1, TabelaType.ENUMERATED));
 
-        int forma = Utils.GetInt("Insira sua escolha");
-
-        switch (forma)
+        switch (Utils.GetInt("Insira sua escolha"))
         {
             case 0:
                 formaBase = Utils.GetDouble("Insira o tamanho da base do triangulo");
@@ -299,13 +255,10 @@ class Program
     /// </summary>
     static void DiasDeVida()
     {
-        // pede para que o usuario insira sua idade em anos
         int anos = Utils.GetInt("Insira quantos anos de vida você possui");
-        // pede para que o usuario insira a quantidade de meses des de seu ultimo aniverssario
         int meses = Utils.GetInt("Insira a quantidade de meses des de seu ultimo aniverssario");
-        // pede para que o usuario insira a quantidade de dias des de o ultimo mes
         int dias = Utils.GetInt("Insira o dia do mês");
-        // devolve ao usuario sua idade em dias
+
         Console.WriteLine($"Você possui um total de {(anos * 365) + (meses * 30) + dias + (meses / 2)} dias de vida.");
     }
     /// <summary>
@@ -313,11 +266,9 @@ class Program
     /// </summary>=
     static void ReajusteSalario()
     {
-        // pede para que o ususario insira o salario mensal atual
         double salario = Utils.GetInt("Insira seu salario mensal atual");
-        // pede para que o ususario insira o percentual de aumento do salario
         double reajustePercentual = Utils.GetInt("Insira o percentual de almento do salario");
-        // devolve para o usuario o valor do novo salairo
+
         Console.WriteLine($"Seu novo salario sera de {salario + ((salario * reajustePercentual) / 100)}");
     }
     /// <summary>
@@ -325,15 +276,11 @@ class Program
     /// </summary>
     static void PercentualVotos()
     {
-        // pede para que o usuario insira o numero de votos em branco
         int votosBrancos = Utils.GetInt("Insita o total de votos em branco");
-        // pede para que o usuario insira o numero de votos nulos
         int votosNulos = Utils.GetInt("Insita o total de votos nulos");
-        // pede para que o usuario insira o numero de votos validos
         int votosValidos = Utils.GetInt("Insita o total de votos validos");
-        // calcula o total de votos
         int votosTotal = votosBrancos + votosNulos + votosValidos;
-        // devolve para o usuario a porcentagem correspondente a cada tipo de voto
+
         Console.WriteLine($"Os votos em branco foram {votosTotal * votosBrancos / 100}% do total");
         Console.WriteLine($"Os votos nulos foram {votosTotal * votosNulos / 100}% do total");
         Console.WriteLine($"Os votos validos foram {votosTotal * votosValidos / 100}% do total");
@@ -353,7 +300,6 @@ class Program
         timeNomes[1] = Console.ReadLine();
 
         timePontos[0] = Utils.GetInt("Insira a quantidade de pontos do primeiro time");
-
         timePontos[1] = Utils.GetInt("Insira a quantidade de pontos do segundo time");
 
         if (timePontos[0] > timePontos[1])
@@ -376,16 +322,14 @@ class Program
         int provas = Utils.GetInt("Insira a quantidade de provas a serem contadas");
         float resultado = 0;
         float[] notas = new float[provas];
+
         Console.WriteLine("Insira suas notas");
         for (int i = 0; i < provas; i++)
-        {
-            if (i == 0)
-                notas[i] = Utils.GetFloat("Insira a primeira nota");
-            else
-                notas[i] = Utils.GetFloat("Insira a proxima nota");
-        }
+            notas[i] = Utils.GetFloat($"Insira a {i+1}º nota");
+
         for (int i = 0; i < provas; i++)
             resultado += notas[i];
+
         resultado /= provas;
 
         if (resultado >= 7)
@@ -401,19 +345,19 @@ class Program
     static void IMC()
     {
         string[] imcTable = new string[]{
-                "abaixo de 17 - muito abaixo do peso",
-                "17 a 18.99 - abaixo do peso",
-                "19 a 24.99 - peso ideal",
-                "25 a 29.99 - sobrepeso",
-                "30 a 34.99 - obesidade",
-                "35 a 40 - obesidade severa",
-                "acima de 40 - obesidade morbida"
-            };
+            "abaixo de 17 - muito abaixo do peso",
+            "17 a 18.99 - abaixo do peso",
+            "19 a 24.99 - peso ideal",
+            "25 a 29.99 - sobrepeso",
+            "30 a 34.99 - obesidade",
+            "35 a 40 - obesidade severa",
+            "acima de 40 - obesidade morbida"
+        };
         float massa = Utils.GetFloat("Insira seu peso em quilos");
         int altura = Utils.GetInt("Insira sua altura em metros sem ponto ou virgula");
-        float resultado = massa / ((altura / 100) ^ 2);
+        float resultado = (massa / ((altura / 100) ^ 2));
 
-        Console.WriteLine($"\nSeu IMC é de {resultado}");
+        Console.WriteLine($"\nSeu IMC é {resultado}");
 
         Console.WriteLine($"\n{Utils.FormatTable(imcTable, 2)}");
     }
@@ -428,10 +372,8 @@ class Program
         float salarioFinal = (salario * horasMensais) + ((salario * 1.5f) * horasExtra);
 
         Console.WriteLine($"Seu salario é de {salario * horasMensais}.");
-
         Console.WriteLine($"Acrecentados {(salario * 1.5f) * horasExtra} pelas {horasExtra} horas extra.");
-
-        Console.WriteLine($"O total foi de {salarioFinal}.");
+        Console.WriteLine($"O total é de {salarioFinal}.");
     }
     /// <summary>
     /// Simula uma venda de combustiveis
@@ -463,16 +405,17 @@ class Program
 
         float litros = Utils.GetFloat("Insira quantos litros deseja");
         double valorTotal = 0;
+
         if (litros <= 20)
         {
-            if (combTipo == "A")
+            if (combTipo == "A" || combTipo == "a")
                 valorTotal = litros * (2.9 - (2.9 * 0.03));
             else
                 valorTotal = litros * (3.3 - (3.3 * 0.04));
         }
         else
         {
-            if (combTipo == "A")
+            if (combTipo == "A" || combTipo == "a")
                 valorTotal = litros * (2.9 - (2.9 * 0.04));
             else
                 valorTotal = litros * (3.3 - (3.3 * 0.06));
@@ -517,7 +460,7 @@ class Program
     static void IraViajar()
     {
         bool temOnibus = Utils.GetRandom();
-        float passagem = Utils.GetRandom(200, 500);
+        float passagem = Utils.GetRandom(150, 600);
         string nome;
         float carteira;
 
@@ -574,61 +517,42 @@ class Program
     {
         string[] optionsTable = new string[]
         {
-            "Decimal Inteiro para Binario",
-            "Binario Inteiro para Decimal",
-            "Decimal Quebrado para Binario",
-            "Binario Quebrado para Decimal",
+            "Decimal para Binario",
+            "Binario para Decimal",
         };
 
-        Console.WriteLine(Utils.FormatTable(optionsTable, 2, TabelaType.ENUMERATED));
+        Console.WriteLine(Utils.FormatTable(optionsTable, 1, TabelaType.ENUMERATED));
 
-        switch (Utils.GetInt("Insira sua escolha"))
+        switch (Utils.GetInt("Insira sua escolha (use ',' para numeros quebrados)"))
         {
-            case 0:     // Decimal Inteiro para Binario
-                int decIn = Utils.GetInt("Insira o numero Decimal inteiro");
-                int nIn = decIn;
-                string decInResult = "";
-
-                while (nIn > 0)
-                {
-                    if (nIn % 2 == 0) decInResult += "0";
-                    else decInResult += "1";
-                    nIn /= 2;
-                }
-
-                Console.WriteLine($"{decIn} em binario é: {Utils.InvertString(decInResult)}");
-                break;
-            case 1:     // Binario Inteiro para Decimal
-                string binIn = Utils.GetInt("Insira o numero Binario inteiro").ToString();
-                string invertBinIn = Utils.InvertString(binIn);
-                int binInResult = 0;
-
-
-                for (int i = 0; i < invertBinIn.Length; i++)
-                    binInResult += (int)(Convert.ToInt32(invertBinIn[i] - '0') * Math.Pow(2, i));
-
-                Console.WriteLine($"{binIn} em decimal é: {binInResult}");
-                break;
-            case 2:     // Decimal Quebrado para Binario
-                float dec = Utils.GetFloat("Insira o numero Decimal quebrado");
+            case 0:     // Decimal para Binario
+                float dec = Utils.GetFloat("Insira o numero Decimal");
                 string sDec = dec.ToString();
                 int befComN = 0;
                 float aftComN = 0;
+                bool comma = false;
                 string sBefComN = "", sAftComN ="";
                 string decResult = "";
 
                 for(int i = 0; i < sDec.Length; i++)
                 {
-                    if (sDec[i] == ',' || sDec[i] == '.') break;
+                    if (sDec[i] == ',' || sDec[i] == '.')
+                    {
+                        comma = true;
+                        break;
+                    }
                     sBefComN += Convert.ToInt32(sDec[i] - '0');
                 }
-                for (int i = sBefComN.Length+1; i < sDec.Length; i++)
+                if (comma)
                 {
-                    sAftComN += Convert.ToInt32(sDec[i] - '0');
+                    for (int i = sBefComN.Length + 1; i < sDec.Length; i++)
+                    {
+                        sAftComN += Convert.ToInt32(sDec[i] - '0');
+                    }
                 }
 
                 befComN = Convert.ToInt32(sBefComN);
-                aftComN = (float)Convert.ToDouble(sAftComN)/1000;
+                if (comma) aftComN = (float)Convert.ToDouble(sAftComN)/1000;
 
                 while (befComN > 0)
                 {
@@ -636,19 +560,23 @@ class Program
                     else decResult += "1";
                     befComN /= 2;
                 }
-                decResult += ".";
-                for(int i = 0; i < sAftComN.Length; i++)
+                if (comma)
                 {
-                    if (aftComN * 2 < 1) decResult += "0";
-                    else decResult += "1";
-                    aftComN *= 2;
+                    decResult += ".";
+                    for (int i = 0; i < sAftComN.Length; i++)
+                    {
+                        if (aftComN * 2 < 1) decResult += "0";
+                        else decResult += "1";
+                        aftComN *= 2;
+                    }
                 }
+
+                decResult = (comma) ? decResult : Utils.InvertString(decResult);
 
                 Console.WriteLine($"{dec} em binario é: {decResult}");
                 break;
-            case 3:     // Binario Quebrado para Decimal
-                string bin = Utils.GetDouble("Insira o numero Binario quebrado").ToString();
-                // string invertBin = Utils.InvertString(bin);
+            case 1:     // Binario para Decimal
+                string bin = Utils.GetDouble("Insira o numero Binario").ToString();
                 int befComBinN = 0;
                 double aftComBinN = 0;
                 string sBefComBinN = "";
