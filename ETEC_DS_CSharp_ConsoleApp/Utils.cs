@@ -12,7 +12,7 @@ public enum TabelaType
 public class Utils
 {
     /// <summary>
-    /// retorna verdadeiro se for um numero e falso se for algum outro caractere
+    /// Retorna verdadeiro se for um numero e falso se for algum outro caractere
     /// </summary>
     public static bool VerificarNumero(string input)
     {
@@ -46,7 +46,7 @@ public class Utils
         return true;
     }
     /// <summary>
-    /// retorna um valor aleatorio entre um valor minimo e maximo do tipo int
+    /// Retorna um valor aleatorio entre um valor minimo e maximo do tipo int
     /// </summary>
     public static int GetRandom(int min, int max)
     {
@@ -54,7 +54,7 @@ public class Utils
         return rand.Next(min, max+1);
     }
     /// <summary>
-    /// retorna um valor booleano aleatorio
+    /// Retorna um valor booleano aleatorio
     /// </summary>
     public static bool GetRandom()
     {
@@ -66,7 +66,7 @@ public class Utils
         return true;
     }
     /// <summary>
-    /// retorna uma string formatada como uma tabela numerada ou não
+    /// Retorna uma string formatada como uma tabela numerada ou não
     /// </summary>
     public static string FormatTable(string[] data, int collumns, TabelaType type = TabelaType.BASIC)
     {
@@ -99,7 +99,7 @@ public class Utils
         return list;
     }
     /// <summary>
-    /// retorna o valor maximo num array de tipo int
+    /// Retorna o valor maximo num array de tipo int
     /// </summary>
     public static int Max(int[] numeros)
     {
@@ -112,7 +112,7 @@ public class Utils
         return max;
     }
     /// <summary>
-    /// retorna o valor maximo num array de tipo float
+    /// Retorna o valor maximo num array de tipo float
     /// </summary>
     public static float Max(float[] numeros)
     {
@@ -125,7 +125,7 @@ public class Utils
         return max;
     }
     /// <summary>
-    /// retorna o valor maximo num array de tipo double
+    /// Retorna o valor maximo num array de tipo double
     /// </summary>
     public static double Max(double[] numeros)
     {
@@ -138,7 +138,7 @@ public class Utils
         return max;
     }
     /// <summary>
-    /// retorna o valor minimo num array de tipo int
+    /// Retorna o valor minimo num array de tipo int
     /// </summary>
     public static int Min(int[] numeros)
     {
@@ -151,7 +151,7 @@ public class Utils
         return min;
     }
     /// <summary>
-    /// retorna o valor minimo num array de tipo float
+    /// Retorna o valor minimo num array de tipo float
     /// </summary>
     public static float Min(float[] numeros)
     {
@@ -164,7 +164,7 @@ public class Utils
         return min;
     }
     /// <summary>
-    /// retorna o valor minimo num array de tipo double
+    /// Retorna o valor minimo num array de tipo double
     /// </summary>
     public static double Min(double[] numeros)
     {
@@ -177,7 +177,7 @@ public class Utils
         return min;
     }
     /// <summary>
-    /// retorna o valor inserido convertido em int
+    /// Retorna o valor inserido convertido em int
     /// </summary>
     public static int GetInt(string message = "")
     {
@@ -187,7 +187,7 @@ public class Utils
         return Convert.ToInt32(input);
     }
     /// <summary>
-    /// retorna o valor inserido convertido em float
+    /// Retorna o valor inserido convertido em float
     /// </summary>
     public static float GetFloat(string message = "")
     {
@@ -197,7 +197,7 @@ public class Utils
         return (float)Convert.ToDouble(input);
     }
     /// <summary>
-    /// retorna o valor inserido convertido em double
+    /// Retorna o valor inserido convertido em double
     /// </summary>
     public static double GetDouble(string message = "")
     {
@@ -207,7 +207,7 @@ public class Utils
         return Convert.ToDouble(input);
     }
     /// <summary>
-    /// retorna uma lista com os comprimentos de cada string de uma lista
+    /// Retorna uma lista com os comprimentos de cada string de uma lista
     /// </summary>
     public static int[] StringLengths(string[] s)
     {
@@ -217,7 +217,7 @@ public class Utils
         return i;
     }
     /// <summary>
-    /// retorna uma string invertida
+    /// Retorna uma string invertida
     /// </summary>
     public static string InvertString(string s)
     {
@@ -229,7 +229,7 @@ public class Utils
         return result;
     }
     /// <summary>
-    /// retorna uma lista reorganizada to tipo int
+    /// Retorna uma lista reorganizada to tipo int
     /// </summary>
     public static int[] Reorganize(int[] numeros)
     {
@@ -240,7 +240,7 @@ public class Utils
         return n.ToArray();
     }
     /// <summary>
-    /// retorna uma lista reorganizada to tipo float
+    /// Retorna uma lista reorganizada to tipo float
     /// </summary>
     public static float[] Reorganize(float[] numeros)
     {
@@ -251,7 +251,7 @@ public class Utils
         return n.ToArray();
     }
     /// <summary>
-    /// retorna uma lista reorganizada to tipo double
+    /// Retorna uma lista reorganizada to tipo double
     /// </summary>
     public static double[] Reorganize(double[] numeros)
     {

@@ -30,6 +30,13 @@ class Program
         "Ira viajar",
         "Contador",
         "Converter Binario/Decimal",
+        "Tabuada",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
     };
     static readonly Dictionary<int, Action> programas = new Dictionary<int, Action>()
     {
@@ -54,34 +61,33 @@ class Program
         { 18, () => IraViajar() },
         { 19, () => Contador()},
         { 20, () => DecimalBinario() },
+        { 21, () => Tabuada() },
     };
 
     static void Main(string[] args)
     {
-        Console.WriteLine("Insira o numero correspondente ao programa que deseja utilizar.");
-        Console.Write($"{Utils.FormatTable(appsTable, 4, TabelaType.ENUMERATED)}\n");
-
-        int appIndex = Utils.GetInt("Insira sua escolha");
-        if (appIndex > programas.ToArray().Length || appIndex < -1)
-        {
-            if (appIndex == -1) Environment.Exit(0);
+        do {
             Console.Clear();
-            Console.Write("O numero inserido não é valido\n\n\n");
-            Main(new string[0]);
-        }
 
-        Console.Clear();
-        programas[appIndex]();
+            Console.WriteLine("Insira o numero correspondente ao programa que deseja utilizar.");
+            Console.Write($"{Utils.FormatTable(appsTable, 4, TabelaType.ENUMERATED)}\n");
 
-        Console.Write("\nDeseja reutilizar o programa? digite [y] para sim ou [n] para não:\n");
-        string input = Console.ReadLine();
-        if (input == "y" || input == "Y")
-            Restart();
+            int appIndex = Utils.GetInt("Insira sua escolha");
+            if (appIndex > programas.ToArray().Length || appIndex < -1)
+            {
+                if (appIndex == -1) Environment.Exit(0);
+                Console.Clear();
+                Console.Write("O numero inserido não é valido\n\n\n");
+                Main(new string[0]);
+            }
 
+            Console.Clear();
+            programas[appIndex]();
+        } while (!TerminarPrograma());
         Environment.Exit(0);
     }
     /// <summary>
-    /// reinicia a aplicação com um código de erro ou não
+    /// Reinicia a aplicação com a possibilidade de um código de erro
     /// </summary>
     public static void Restart(bool erro = false, string err = "")
     {
@@ -91,10 +97,18 @@ class Program
         Console.WriteLine($"{err}!\n\n\n\n\n");
         Main(new string[0]);
     }
-
+    /// <summary>
+    /// Retorna falso se o usuario deseja utilizar o programa novamente
+    /// </summary>
+    static bool TerminarPrograma()
+    {
+        Console.Write("\nDeseja reutilizar o programa? digite [S] para sim ou [N] para não:\n");
+        string input = Console.ReadLine();
+        return (input == "s" || input == "S") ? false : true;
+    }
     #region Calculos
     /// <summary>
-    /// realiza somas
+    /// Realiza somas
     /// </summary>
     static void Soma()
     {
@@ -113,7 +127,7 @@ class Program
         Console.WriteLine($"A soma dos valores é {resultado}");
     }
     /// <summary>
-    /// realiza Subtrações
+    /// Realiza Subtrações
     /// </summary>
     static void Subtrair()
     {
@@ -132,7 +146,7 @@ class Program
         Console.WriteLine($"A soma dos valores é {resultado}");
     }
     /// <summary>
-    /// realiza divizões
+    /// Realiza divizões
     /// </summary>
     static void Dividir()
     {
@@ -158,7 +172,7 @@ class Program
         Console.WriteLine($"A divisão dos valores é {resultado}");
     }
     /// <summary>
-    /// realiza multiplicações
+    /// Realiza multiplicações
     /// </summary>
     static void Multiplicar()
     {
@@ -177,7 +191,7 @@ class Program
         Console.WriteLine($"A multiplicação dos valores é {resultado}");
     }
     /// <summary>
-    /// calcula médias
+    /// Calcula médias
     /// </summary>
     static void Media()
     {
@@ -196,7 +210,7 @@ class Program
         Console.WriteLine($"A média é {resultado / numeros.Length}");
     }
     /// <summary>
-    /// calcula o antecessor de um numero
+    /// Calcula o antecessor de um numero
     /// </summary>
     static void Antecessor()
     {
@@ -204,7 +218,7 @@ class Program
         Console.WriteLine($"O antecessor de {numero} é {numero - 1}");
     }
     /// <summary>
-    /// calcula o sucessor de um numero
+    /// Calcula o sucessor de um numero
     /// </summary>
     static void Sucessor()
     {
@@ -212,7 +226,7 @@ class Program
         Console.WriteLine($"O sucessor de {numero} é {numero + 1}");
     }
     /// <summary>
-    /// calcula se o numero é par ou impar
+    /// Calcula se o numero é par ou impar
     /// </summary>
     static void ParImpar()
     {
@@ -221,7 +235,7 @@ class Program
         Console.WriteLine((numero % 2 == 0) ? $"{numero} é par" : $"{numero} é impar");
     }
     /// <summary>
-    /// calcula a area de diferentes formas geometricas
+    /// Calcula a area de diferentes formas geometricas
     /// </summary>
     static void Areas()
     {
@@ -251,7 +265,7 @@ class Program
         }
     }
     /// <summary>
-    /// calcula dias de vida baseado em anos, meses e dias
+    /// Calcula dias de vida baseado em anos, meses e dias
     /// </summary>
     static void DiasDeVida()
     {
@@ -262,17 +276,17 @@ class Program
         Console.WriteLine($"Você possui um total de {(anos * 365) + (meses * 30) + dias + (meses / 2)} dias de vida.");
     }
     /// <summary>
-    /// calcula reajuste de salario
+    /// Calcula reajuste de salario
     /// </summary>=
     static void ReajusteSalario()
     {
         double salario = Utils.GetInt("Insira seu salario mensal atual");
-        double reajustePercentual = Utils.GetInt("Insira o percentual de almento do salario");
+        double reajustePercentual = Utils.GetInt("Insira o percentual de aumento do salario");
 
         Console.WriteLine($"Seu novo salario sera de {salario + ((salario * reajustePercentual) / 100)}");
     }
     /// <summary>
-    /// percentual de votos
+    /// Percentual de votos
     /// </summary>
     static void PercentualVotos()
     {
@@ -286,7 +300,7 @@ class Program
         Console.WriteLine($"Os votos validos foram {votosTotal * votosValidos / 100}% do total");
     }
     /// <summary>
-    /// calcula qual time venceu baseado na quantidade de pontos
+    /// Calcula qual time venceu baseado na quantidade de pontos
     /// </summary>
     static void TimeVencedor()
     {
@@ -315,17 +329,27 @@ class Program
         Console.WriteLine("Houve um empate!");
     }
     /// <summary>
-    /// calcula a media de um aluno
+    /// Calcula a media de um aluno
     /// </summary>
     static void AprovadoReprovado()
     {
         int provas = Utils.GetInt("Insira a quantidade de provas a serem contadas");
         float resultado = 0;
         float[] notas = new float[provas];
+        float min = Utils.GetFloat("Insira o valor minimo das notas");
+        float max = Utils.GetFloat("Insira o valor maximo das notas");
 
         Console.WriteLine("Insira suas notas");
         for (int i = 0; i < provas; i++)
-            notas[i] = Utils.GetFloat($"Insira a {i+1}º nota");
+        {
+            notas[i] = Utils.GetFloat($"Insira a {i + 1}º nota");
+            if (notas[i] < min || notas[i] > max)
+            {
+                Console.WriteLine("Insira uma nota valida: (entre 0 e 10)");
+                i--;
+                continue;
+            }
+        }
 
         for (int i = 0; i < provas; i++)
             resultado += notas[i];
@@ -340,7 +364,7 @@ class Program
             Console.WriteLine($"Sua média foi {resultado}. Reprovado");
     }
     /// <summary>
-    /// calcula o IMC
+    /// Calcula o IMC
     /// </summary>
     static void IMC()
     {
@@ -511,7 +535,7 @@ class Program
         }
     }
     /// <summary>
-    /// traduz numeros decimais para binario e binario para decimais
+    /// Traduz numeros decimais para binario e binario para decimais
     /// </summary>
     static void DecimalBinario()
     {
@@ -523,10 +547,10 @@ class Program
 
         Console.WriteLine(Utils.FormatTable(optionsTable, 1, TabelaType.ENUMERATED));
 
-        switch (Utils.GetInt("Insira sua escolha (use ',' para numeros quebrados)"))
+        switch (Utils.GetInt("Insira sua escolha"))
         {
             case 0:     // Decimal para Binario
-                float dec = Utils.GetFloat("Insira o numero Decimal");
+                float dec = Utils.GetFloat("Insira o numero Decimal (use ',' para numeros quebrados)");
                 string sDec = dec.ToString();
                 int befComN = 0;
                 float aftComN = 0;
@@ -552,7 +576,9 @@ class Program
                 }
 
                 befComN = Convert.ToInt32(sBefComN);
-                if (comma) aftComN = (float)Convert.ToDouble(sAftComN)/1000;
+                if (comma) aftComN = (float)Convert.ToDouble(sAftComN);
+
+                for (int i = 0; i < sAftComN.Length; i++) aftComN /= 10;
 
                 while (befComN > 0)
                 {
@@ -562,12 +588,14 @@ class Program
                 }
                 if (comma)
                 {
+                    decResult = Utils.InvertString(decResult);
                     decResult += ".";
-                    for (int i = 0; i < sAftComN.Length; i++)
+                    for (int i = 0; i < 3; i++)
                     {
-                        if (aftComN * 2 < 1) decResult += "0";
+                        if ((aftComN * 2) < 1) decResult += "0";
                         else decResult += "1";
                         aftComN *= 2;
+                        if (aftComN >= 1) aftComN -= 1;
                     }
                 }
 
@@ -576,12 +604,12 @@ class Program
                 Console.WriteLine($"{dec} em binario é: {decResult}");
                 break;
             case 1:     // Binario para Decimal
-                string bin = Utils.GetDouble("Insira o numero Binario").ToString();
+                string bin = Utils.GetDouble("Insira o numero Binario (use ',' para numeros quebrados)").ToString();
                 int befComBinN = 0;
-                double aftComBinN = 0;
+                float aftComBinN = 0;
                 string sBefComBinN = "";
                 string sAftComBinN = "";
-                double binResult = 0;
+                float binResult = 0;
 
                 for (int i = 0; i < bin.Length; i++)
                 {
@@ -596,7 +624,7 @@ class Program
                 for (int i = 0; i < sBefComBinN.Length; i++)
                     befComBinN += (int)(Convert.ToInt32(sBefComBinN[i] - '0') * Math.Pow(2, i));
                 for (int i = 0; i < sAftComBinN.Length; i++)
-                    aftComBinN += ((Convert.ToInt32(sAftComBinN[i]) - '0') / Math.Pow(2, i + 1));
+                    aftComBinN += (float)((Convert.ToInt32(sAftComBinN[i]) - '0') / Math.Pow(2, i + 1));
 
                 binResult += befComBinN + aftComBinN;
 
@@ -606,6 +634,17 @@ class Program
                 Restart(true, "Sua escolha estava fora dos parametros!");
                 break;
         }
+    }
+    /// <summary>
+    /// Gera uma tabuada de a cordo com as especificações do usuario
+    /// </summary>
+    static void Tabuada()
+    {
+        int num = Utils.GetInt("Insira o numero");
+        int tamanho = Utils.GetInt("Insira até que numero a tabuada deve ir");
+
+        for ( int i = 0; i <= tamanho; i++)
+            Console.WriteLine($"{num} X {i} = {num * i}");
     }
     #endregion
 }
