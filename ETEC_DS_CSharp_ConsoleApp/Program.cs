@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 class Program
 {
@@ -22,7 +20,7 @@ class Program
         "Reajuste de salario",
         "Percentual de votos",
         "Time vencedor",
-        "Aprovado ou Reprovado",
+        "Média de notas",
         "IMC",
         "Salario Horas Extra",
         "Venda de Combustiveis",
@@ -31,8 +29,8 @@ class Program
         "Contador",
         "Converter Binario/Decimal",
         "Tabuada",
-        "",
-        "",
+        "Contar Positivos Negativos",
+        "Numeros Entre Minimo/Maximo",
         "",
         "",
         "",
@@ -53,15 +51,17 @@ class Program
         { 10, () => ReajusteSalario() },
         { 11, () => PercentualVotos() },
         { 12, () => TimeVencedor() },
-        { 13, () => AprovadoReprovado() },
+        { 13, () => MediaNotas() },
         { 14, () => IMC() },
         { 15, () => Salario() },
         { 16, () => Combustiveis() },
-        { 17, () => IgualdadeNumeros() },
+        { 17, () => Igualdadenumeros() },
         { 18, () => IraViajar() },
         { 19, () => Contador()},
         { 20, () => DecimalBinario() },
         { 21, () => Tabuada() },
+        { 22, () => ContNumPosNeg() },
+        { 23, () => NumerosEntre() }
     };
 
     static void Main(string[] args)
@@ -69,17 +69,18 @@ class Program
         do {
             Console.Clear();
 
-            Console.WriteLine("Insira o numero correspondente ao programa que deseja utilizar.");
+            Console.WriteLine("Insira o número correspondente ao programa que deseja utilizar.");
             Console.Write($"{Utils.FormatTable(appsTable, 4, TabelaType.ENUMERATED)}\n");
 
             int appIndex = Utils.GetInt("Insira sua escolha");
             if (appIndex > programas.ToArray().Length || appIndex < -1)
             {
-                if (appIndex == -1) Environment.Exit(0);
                 Console.Clear();
-                Console.Write("O numero inserido não é valido\n\n\n");
+                Console.Write("O número inserido não é valido\n\n\n");
                 Main(new string[0]);
             }
+
+            if (appIndex == -1) Environment.Exit(0);
 
             Console.Clear();
             programas[appIndex]();
@@ -103,8 +104,8 @@ class Program
     static bool TerminarPrograma()
     {
         Console.Write("\nDeseja reutilizar o programa? digite [S] para sim ou [N] para não:\n");
-        string input = Console.ReadLine();
-        return (input == "s" || input == "S") ? false : true;
+        string input = Console.ReadLine().ToUpper();
+        return (input == "S") ? false : true;
     }
     #region Calculos
     /// <summary>
@@ -183,7 +184,15 @@ class Program
         double[] numeros = new double[inputMultiplicar];
 
         for (int i = 0; i < numeros.Length; i++)
-            numeros[i] = Utils.GetInt($"Digite o {i+1}º valor para a multiplicação");
+        {
+            numeros[i] = Utils.GetInt($"Digite o {i + 1}º valor para a multiplicação");
+
+            if(numeros[i] == 0)
+            {
+                Console.WriteLine("Multiplicações por 0 sempre resultam em 0!");
+                return;
+            }
+        }
 
         for (int j = 0; j < numeros.Length; j++)
             resultado *= numeros[j];
@@ -197,7 +206,7 @@ class Program
     {
         double resultado = 0;
 
-        int numerosParaMedia = Utils.GetInt("Insira quantas notas serão calculadas para obter a média");
+        int numerosParaMedia = Utils.GetInt("Insira quantos números serão calculados para obter a média");
 
         double[] numeros = new double[numerosParaMedia];
 
@@ -210,29 +219,29 @@ class Program
         Console.WriteLine($"A média é {resultado / numeros.Length}");
     }
     /// <summary>
-    /// Calcula o antecessor de um numero
+    /// Calcula o antecessor de um número
     /// </summary>
     static void Antecessor()
     {
-        int numero = Utils.GetInt("Insira um numero para que o antecessor seja calculado");
-        Console.WriteLine($"O antecessor de {numero} é {numero - 1}");
+        int número = Utils.GetInt("Insira um número para que o antecessor seja calculado");
+        Console.WriteLine($"O antecessor de {número} é {número - 1}");
     }
     /// <summary>
-    /// Calcula o sucessor de um numero
+    /// Calcula o sucessor de um número
     /// </summary>
     static void Sucessor()
     {
-        int numero = Utils.GetInt("Insira um numero para que o sucessor seja calculado");
-        Console.WriteLine($"O sucessor de {numero} é {numero + 1}");
+        int número = Utils.GetInt("Insira um número para que o sucessor seja calculado");
+        Console.WriteLine($"O sucessor de {número} é {número + 1}");
     }
     /// <summary>
-    /// Calcula se o numero é par ou impar
+    /// Calcula se o número é par ou impar
     /// </summary>
     static void ParImpar()
     {
-        int numero = Utils.GetInt("Insira o numero a ser calculado");
+        int número = Utils.GetInt("Insira o número a ser calculado");
 
-        Console.WriteLine((numero % 2 == 0) ? $"{numero} é par" : $"{numero} é impar");
+        Console.WriteLine((número % 2 == 0) ? $"{número} é par" : $"{número} é impar");
     }
     /// <summary>
     /// Calcula a area de diferentes formas geometricas
@@ -246,7 +255,7 @@ class Program
                 "Area do quadrado/retangulo = 1",
         };
 
-        Console.Write("Insira o numero correspondente ao calculo que deseja");
+        Console.Write("Insira o número correspondente ao calculo que deseja");
 
         Console.WriteLine(Utils.FormatTable(formas, 1, TabelaType.ENUMERATED));
 
@@ -329,11 +338,11 @@ class Program
         Console.WriteLine("Houve um empate!");
     }
     /// <summary>
-    /// Calcula a media de um aluno
+    /// Calcula a media de notas
     /// </summary>
-    static void AprovadoReprovado()
+    static void MediaNotas()
     {
-        int provas = Utils.GetInt("Insira a quantidade de provas a serem contadas");
+        int provas = Utils.GetInt("Insira a quantidade de notas a serem contadas");
         float resultado = 0;
         float[] notas = new float[provas];
         float min = Utils.GetFloat("Insira o valor minimo das notas");
@@ -345,7 +354,7 @@ class Program
             notas[i] = Utils.GetFloat($"Insira a {i + 1}º nota");
             if (notas[i] < min || notas[i] > max)
             {
-                Console.WriteLine("Insira uma nota valida: (entre 0 e 10)");
+                Console.WriteLine($"Insira uma nota valida: (entre {min} e {max})");
                 i--;
                 continue;
             }
@@ -356,12 +365,7 @@ class Program
 
         resultado /= provas;
 
-        if (resultado >= 7)
-            Console.WriteLine($"Sua média foi {resultado}. Aprovado");
-        else if (resultado < 7 && resultado >= 5)
-            Console.WriteLine($"Sua média foi {resultado}. Recuperação");
-        else
-            Console.WriteLine($"Sua média foi {resultado}. Reprovado");
+        Console.WriteLine($"Sua média foi {resultado}.");
     }
     /// <summary>
     /// Calcula o IMC
@@ -450,7 +454,7 @@ class Program
     /// verifica a igualdade entre numeros em uma lista 
     /// e retorna se são todos iguais ou quais são o maior e menor valor
     /// </summary>
-    static void IgualdadeNumeros()
+    static void Igualdadenumeros()
     {
         bool iguais = true;
         float[] numeros = new float[Utils.GetInt("Insira quantos numeros deseja verificar")];
@@ -467,12 +471,11 @@ class Program
             return;
         }
 
-        Console.WriteLine($"{Utils.Max(numeros)} é o maior e {Utils.Min(numeros)} é o menor numero");
+        Console.WriteLine($"{Utils.Max(numeros)} é o maior e {Utils.Min(numeros)} é o menor número");
 
         Console.Write("\nDeseja visualizar a lista de numeros organizada? digite [y] para sim ou [n] para não:\n");
-        string input = Console.ReadLine();
-        if (input == "n" || input == "N")
-            Restart();
+        string input = Console.ReadLine().ToUpper();
+        if (input == "N") Restart();
 
         Console.WriteLine("Lista organizada:\n");
         foreach (int i in Utils.Reorganize(numeros))
@@ -516,8 +519,8 @@ class Program
     /// </summary>
     static void Contador()
     {
-        int min = Utils.GetInt("Insira o numero inicial");
-        int max = Utils.GetInt("Insira o numero final");
+        int min = Utils.GetInt("Insira o número inicial");
+        int max = Utils.GetInt("Insira o número final");
         int dist = Utils.GetInt("Insira de quanto em quanto o contador deve contar");
 
         if (min == max)
@@ -550,7 +553,7 @@ class Program
         switch (Utils.GetInt("Insira sua escolha"))
         {
             case 0:     // Decimal para Binario
-                float dec = Utils.GetFloat("Insira o numero Decimal (use ',' para numeros quebrados)");
+                float dec = Utils.GetFloat("Insira o número Decimal (use ',' para numeros quebrados)");
                 string sDec = dec.ToString();
                 int befComN = 0;
                 float aftComN = 0;
@@ -604,7 +607,7 @@ class Program
                 Console.WriteLine($"{dec} em binario é: {decResult}");
                 break;
             case 1:     // Binario para Decimal
-                string bin = Utils.GetDouble("Insira o numero Binario (use ',' para numeros quebrados)").ToString();
+                string bin = Utils.GetDouble("Insira o número Binario (use ',' para numeros quebrados)").ToString();
                 int befComBinN = 0;
                 float aftComBinN = 0;
                 string sBefComBinN = "";
@@ -640,11 +643,49 @@ class Program
     /// </summary>
     static void Tabuada()
     {
-        int num = Utils.GetInt("Insira o numero");
-        int tamanho = Utils.GetInt("Insira até que numero a tabuada deve ir");
+        int num = Utils.GetInt("Insira o número");
+        int tamanho = Utils.GetInt("Insira até que número a tabuada deve ir");
 
         for ( int i = 0; i <= tamanho; i++)
             Console.WriteLine($"{num} X {i} = {num * i}");
+    }
+    /// <summary>
+    /// Conta quantos numeros entre os digitados são positivos e negativos
+    /// </summary>
+    static void ContNumPosNeg()
+    {
+        float[] nums = new float[Utils.GetInt("Insira quantos numeros deseja verificar")];
+        int negs = 0, pos = 0;
+
+        for(int i = 0; i < nums.Length; i++)
+        {
+            nums[i] = Utils.GetFloat($"Insira o {i}º número");
+            if (nums[i] >= 0) pos++;
+            else negs++;
+        }
+
+        Console.WriteLine($"Entre os numeros digitados, {pos} são positivos e {negs} são negativos");
+    }
+    /// <summary>
+    /// Conta quantos dos numeros inseridos estão entre os numeros minimo e maximo
+    /// </summary>
+    static void NumerosEntre()
+    {
+        float[] nums = new float[Utils.GetInt("Insira quantos numeros deseja verificar")];
+        float min = Utils.GetFloat("Insira o número minimo"),
+            max = Utils.GetFloat("Insira o número maximo");
+
+        int entre = 0;
+
+        for(int i = 0; i < nums.Length; i++)
+        {
+            nums[i] = Utils.GetFloat($"Insira o {i}º número");
+
+            if (nums[i] >= min && nums[i] <= max)
+                entre++;
+        }
+
+        Console.WriteLine($"{entre} numeros dos digitados estão entre {min} e {max}");
     }
     #endregion
 }
