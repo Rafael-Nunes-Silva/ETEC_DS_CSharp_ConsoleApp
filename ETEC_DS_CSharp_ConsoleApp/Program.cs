@@ -28,10 +28,10 @@ class Program
         "Ira viajar",
         "Contador",
         "Converter Binario/Decimal",
+        "Converter Hexadecimal/Decimal",
         "Tabuada",
         "Contar Positivos Negativos",
         "Numeros Entre Minimo/Maximo",
-        "",
         "",
         "",
         "",
@@ -59,15 +59,16 @@ class Program
         { 18, () => IraViajar() },
         { 19, () => Contador()},
         { 20, () => DecimalBinario() },
-        { 21, () => Tabuada() },
-        { 22, () => ContNumPosNeg() },
-        { 23, () => NumerosEntre() }
+        { 21, () => DecimalHexadecimal() },
+        { 22, () => Tabuada() },
+        { 23, () => ContNumPosNeg() },
+        { 24, () => NumerosEntre() }
     };
 
     static void Main(string[] args)
     {
         do {
-            Console.Clear();
+            // Console.Clear();
 
             Console.WriteLine("Insira o número correspondente ao programa que deseja utilizar.");
             Console.Write($"{Utils.FormatTable(appsTable, 4, TabelaType.ENUMERATED)}\n");
@@ -638,9 +639,73 @@ class Program
                 break;
         }
     }
+    static void DecimalHexadecimal()
+    {
+        string[] optionsTable = new string[]
+        {
+            "Decimal para Hexadecimal",
+            "Hexadecimal para Decimal",
+        };
+
+        Console.WriteLine(Utils.FormatTable(optionsTable, 1, TabelaType.ENUMERATED));
+
+        char[] hexadecimalValues = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
+
+        switch (Utils.GetInt("Insira sua escolha"))
+        {
+            case 0:     // Decimal para Hexadecimal
+                int dec = Utils.GetInt("Insira o número Decimal");
+
+                List<int> remainders = new List<int>(0);
+                float lastDivision = dec;
+
+                while (lastDivision > 0)
+                {
+                    Console.WriteLine($"lastDivision: {lastDivision}");
+
+                    lastDivision = (int)lastDivision / 16.0f;
+                    float tempRemainder = 16 * (lastDivision - (int)lastDivision);
+
+                    if ((int)tempRemainder > 0)
+                        remainders.Add((int)tempRemainder);
+                }
+                remainders.Reverse();
+
+                for (int i = 0; i < remainders.Count(); i++)
+                    Console.Write(hexadecimalValues[remainders[i]].ToString());
+                break;
+            case 1:     // Hexadecimal para Decimal
+                Console.Write("Insira o número Decimal: ");
+                string hexa = Console.ReadLine();
+                int result = 0;
+
+                hexa = Utils.InvertString(hexa);
+
+                for (int i = 0; i < hexa.Length; i++)
+                {
+                    for (int j = 0; j < 16; j++)
+                    {
+                        if (hexa[i] == hexadecimalValues[j])
+                        {
+                            result += j * (int)Math.Pow(16, i);
+                            break;
+                        }
+                        if (j == 15)
+                            Restart(true, "Hexadecimal code invalid");
+                    }
+                }
+
+                Console.WriteLine(result);
+                break;
+            default:
+                Restart(true, "Sua escolha estava fora dos parametros!");
+                break;
+        }
+    }
     /// <summary>
     /// Gera uma tabuada de a cordo com as especificações do usuario
     /// </summary>
+    /// 
     static void Tabuada()
     {
         int num = Utils.GetInt("Insira o número");
